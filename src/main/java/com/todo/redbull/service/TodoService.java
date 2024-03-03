@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class TodoService {
     ArrayList<Todo> db = new ArrayList<>();
+
+    int counter = 4;
 
     public TodoService(){
         //at the init level, simply put some dummy values in db for su
@@ -21,16 +24,26 @@ public class TodoService {
     public ArrayList<Todo> getAllTodo(){
         return db;
     }
+
     public Todo getTodoById(String id){
         return db.get(Integer.parseInt(id));
     }
-    public String addTodo(Todo todo){
+
+    public Todo addTodo(Todo todo){
+        todo.setId(counter);
+        counter++;
         db.add(todo);
-        return "Successfully Added!";
+        return todo;
     }
-    public String updateTodoById(Todo todo){
-        return "updated";
+
+    public Todo updateTodoById(int id, Todo todo){
+        int idx = -1;
+        for(int i = 0; i < db.size(); i++)  if(id == db.get(i).getId()) idx = i;
+        todo.setId(id);
+        db.set(idx, todo);
+        return todo;
     }
+
     public String deleteTodoById(Todo todo){
        db.remove(todo);
        return "Removed";

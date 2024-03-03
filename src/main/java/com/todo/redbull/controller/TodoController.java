@@ -15,10 +15,6 @@ import java.util.ArrayList;
 public class TodoController {
 
     //REST API
-    //Get, post, put, delete, update
-    //todo - get, post
-    //todo/:id - put, delete, update
-
     @Autowired
     private TodoService todoService;
 
@@ -28,20 +24,25 @@ public class TodoController {
         return ResponseEntity.ok(todoService.getAllTodo());
     }
 
+    @GetMapping("/todo/freetier")
+    public String freeTier(){
+        return "hello world!";
+    }
+
     @GetMapping("/todo/{id}")
     public ResponseEntity<Todo> getTodoById(@PathVariable  String id){
         return ResponseEntity.ok(todoService.getTodoById(id));
     }
 
     @PostMapping("/todo")
-    public ResponseEntity<String> addTodo(@Valid @RequestBody Todo todo){
-        String message = todoService.addTodo(todo);
+    public ResponseEntity<Todo> addTodo(@Valid @RequestBody Todo todo){
+        Todo message = todoService.addTodo(todo);
         return ResponseEntity.status(201).body(message);
     }
 
-    @PutMapping("/todo")
-    public ResponseEntity<String> updateTodo(@Valid @RequestBody Todo todo){
-        String message = todoService.updateTodoById(todo);
+    @PutMapping("/todo/{id}")
+    public ResponseEntity<Todo> updateTodo(@PathVariable String id,  @Valid @RequestBody Todo todo){
+        Todo message = todoService.updateTodoById(Integer.parseInt(id), todo);
         return ResponseEntity.ok(message);
     }
 
@@ -50,6 +51,7 @@ public class TodoController {
         String message = todoService.deleteTodoById(todo);
         return ResponseEntity.ok(message);
     }
+
 
 }
 
